@@ -1,5 +1,6 @@
 package com.products.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,6 @@ public class Product {
     private Double cost;
 
     @ManyToOne
+//    @JsonIgnore
     private Categories category;
 }

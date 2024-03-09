@@ -1,4 +1,4 @@
-package com.products.entity;
+package com.products.model;
 
 
 import lombok.AllArgsConstructor;
@@ -22,6 +22,9 @@ public class Categories {
     @Column(name = "name")
     private String categoryName;
 
-    @OneToMany
-    private List<Products> products;
+    @Column(name = "decription")
+    private String categoryDescription;
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 }
