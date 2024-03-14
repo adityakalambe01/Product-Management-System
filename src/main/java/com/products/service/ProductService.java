@@ -88,7 +88,7 @@ public class ProductService {
     public void addDefaultProducts(){
         List<Categories> allCategories = new LinkedList<>(categoryRepository.findAll());
         System.out.println("\n\n\n\n");
-        int index = 1;
+        long index = productRepository.count()+1;
         for (Categories categories : allCategories) {
             for (int j = 0; j < 2; j++) {
                 Product p = new Product();

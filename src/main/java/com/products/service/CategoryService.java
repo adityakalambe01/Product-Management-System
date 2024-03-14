@@ -115,6 +115,12 @@ public class CategoryService {
         }
     }
 
+
+    /*
+    *
+    * Delete Category by id
+    *
+    * */
     public Boolean deleteCategoryById(Long categoryId, boolean forcefully) {
         try {
             Optional<Categories> categoryOptional = categoryRepository.findById(categoryId);
