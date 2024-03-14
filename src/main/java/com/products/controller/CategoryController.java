@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/categories/")
+@RequestMapping("api/categories")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
@@ -33,7 +33,7 @@ public class CategoryController {
     * Update Category
     *
     * */
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<String> updateCategory(@PathVariable Long id ,@RequestBody Categories updateCategory){
         if (categoryService.updateCategory(id, updateCategory)){
             return ResponseEntity.ok("Successfully updated category id " + id);
@@ -47,8 +47,11 @@ public class CategoryController {
     *
     * */
     @GetMapping
-    public ResponseEntity<List<Categories>> getAllCategories(){
-        return ResponseEntity.ok(categoryService.getAllCategories());
+    public ResponseEntity<List<Categories>> getAllCategories(
+            @RequestParam(value = "page",defaultValue = "1", required = false) Integer pageNumber,
+            @RequestParam(value = "size", defaultValue = "5", required = false) Integer pageSize
+    ){
+        return ResponseEntity.ok(categoryService.getAllCategories(pageNumber, pageSize));
     }
 
     /*
@@ -56,7 +59,7 @@ public class CategoryController {
     * Get Category by id
     *
     * */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Object> getCategoryByID(@PathVariable("id") Long categoryId){
         Categories dbCategory = categoryService.getCategoryById(categoryId);
 
@@ -68,7 +71,7 @@ public class CategoryController {
     * Delete Category
     *
     * */
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategoryById(@PathVariable("id") Long categoryId){
         return categoryService.deleteCategoryById(categoryId) ?
                 ResponseEntity.ok("Successfully deleted category having id "+categoryId) : ResponseEntity.ok("Invalid category id "+categoryId);

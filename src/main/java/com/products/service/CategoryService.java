@@ -3,6 +3,9 @@ package com.products.service;
 import com.products.model.Categories;
 import com.products.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
@@ -20,8 +23,9 @@ public class CategoryService {
     * Get all Categories
     *
     * */
-    public List<Categories> getAllCategories(){
-        return categoryRepository.findAll();
+    public List<Categories> getAllCategories(Integer pageNumber, Integer pageSize){
+        return   categoryRepository.findAll(PageRequest.of(pageNumber, pageSize))
+                                   .getContent();
     }
 
     /*
