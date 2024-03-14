@@ -43,7 +43,7 @@ public class CategoryService {
         try{
             categories = categoryRepository.findById(categoryID).get();
         }catch(Exception e){
-            return null;
+            return null; // Category with the given ID not found
         }
         return categories;
     }
@@ -60,7 +60,7 @@ public class CategoryService {
                 throw new IllegalArgumentException("Category already exists!");
             categoryRepository.save(category);
         }catch (Exception e){
-            return false;
+            return false; // Category with the given category name already exists
         }
         return true;
     }
@@ -79,7 +79,7 @@ public class CategoryService {
             dbCategory.setCategoryDescription(updateCategory.getCategoryDescription());
             categoryRepository.save(dbCategory);
         }catch (Exception e){
-            return false;
+            return false; // Category with the given ID not found
         }
         return true;
     }
