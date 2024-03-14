@@ -50,27 +50,6 @@ public class CategoryService {
 
     /*
     *
-    * Delete Category by Id
-    *
-    * */
-    public Boolean deleteCategoryById(long categoryId) {
-        try {
-            Optional<Categories> categoryOptional = categoryRepository.findById(categoryId);
-            if (categoryOptional.isPresent()) {
-                Categories category = categoryOptional.get();
-                categoryRepository.delete(category);
-                return true; // Successfully deleted
-            } else {
-                return false; // Category with the given ID not found
-            }
-        } catch (Exception e) {
-            // Log the exception or handle it appropriately
-            return null; // Failed to delete due to an exception
-        }
-    }
-
-    /*
-    *
     * Add Category
     *
     * */
@@ -136,20 +115,24 @@ public class CategoryService {
         }
     }
 
-
-    /*
-    *
-    * Delete Category Forcefully
-    *
-    * */
-    public Boolean deleteCategoryByIdForcefully(Long categoryId) {
+    public Boolean deleteCategoryById(Long categoryId, boolean forcefully) {
         try {
-            Categories dbCategory = categoryRepository.findById(categoryId).get();
-            productRepository.deleteByCategory(dbCategory);
-            categoryRepository.delete(dbCategory);
-        }catch (Exception e){
-            return false;
+            Optional<Categories> categoryOptional = categoryRepository.findById(categoryId);
+            if (categoryOptional.isPresent()) {
+                Categories category = categoryOptional.get();
+                if (forcefully) {
+                    productRepository.deleteByCategory(category);
+                }
+                categoryRepository.delete(category);
+                return true; // Successfully deleted
+            } else {
+                return false; // Category with the given ID not found
+            }
+        } catch (NoSuchElementException e) {
+            return false; // Category with the given ID not found
+        } catch (Exception e) {
+            return null; // Failed to delete due to an exception
         }
-        return true;
     }
+
 }
