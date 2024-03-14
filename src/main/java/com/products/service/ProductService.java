@@ -10,10 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -21,7 +18,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private CategoryRepository categoryService;
+    private CategoryRepository categoryRepository;
 
     /*
     *
@@ -81,5 +78,29 @@ public class ProductService {
             return true;
         }
         return false;
+    }
+
+    /*
+    *
+    * Add Default Products
+    *
+    * */
+    public void addDefaultProducts(){
+        List<Categories> allCategories = new LinkedList<>(categoryRepository.findAll());
+        System.out.println("\n\n\n\n");
+        int index = 1;
+        for (Categories categories : allCategories) {
+            for (int j = 0; j < 2; j++) {
+                Product p = new Product();
+                p.setCategory(categories);
+                p.setName("Product " + (index++));
+                p.setCost(
+                        Math.round((Math.random() * (50000.00 - 30000.00) + 30000.00) * 100.0) / 100.0
+                );
+                productRepository.save(p);
+
+            }
+        }
+
     }
 }

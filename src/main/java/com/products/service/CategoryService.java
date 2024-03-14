@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 @Service
@@ -47,15 +49,20 @@ public class CategoryService {
     * Delete Category by Id
     *
     * */
-    public Boolean deleteCategoryById(long categoryID){
-
-        try{
-            Categories categories = categoryRepository.findById(categoryID).get();
-            categoryRepository.delete(categories);
-        }catch(Exception e){
-            return false;
+    public Boolean deleteCategoryById(long categoryId) {
+        try {
+            Optional<Categories> categoryOptional = categoryRepository.findById(categoryId);
+            if (categoryOptional.isPresent()) {
+                Categories category = categoryOptional.get();
+                categoryRepository.delete(category);
+                return true; // Successfully deleted
+            } else {
+                return false; // Category with the given ID not found
+            }
+        } catch (Exception e) {
+            // Log the exception or handle it appropriately
+            return null; // Failed to delete due to an exception
         }
-        return true;
     }
 
     /*
