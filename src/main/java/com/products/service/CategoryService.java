@@ -2,6 +2,7 @@ package com.products.service;
 
 import com.products.model.Categories;
 import com.products.repositories.CategoryRepository;
+import com.products.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,9 @@ import java.util.*;
 public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     /*
     *
@@ -130,5 +134,22 @@ public class CategoryService {
             }
             System.out.println("Default categories added successfully");
         }
+    }
+
+
+    /*
+    *
+    * Delete Category Forcefully
+    *
+    * */
+    public Boolean deleteCategoryByIdForcefully(Long categoryId) {
+        try {
+            Categories dbCategory = categoryRepository.findById(categoryId).get();
+            productRepository.deleteByCategory(dbCategory);
+            categoryRepository.delete(dbCategory);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
     }
 }
