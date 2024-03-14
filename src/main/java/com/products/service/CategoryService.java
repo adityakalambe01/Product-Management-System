@@ -9,9 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 @Service
 public class CategoryService {
@@ -99,7 +98,7 @@ public class CategoryService {
     @PostConstruct
     public void addDefaultCategories() {
         if (categoryRepository.count() == 0) {
-            Map<String,String> productCategories= new HashMap<>();
+            Map<String,String> productCategories= new LinkedHashMap<>();
 
             productCategories.put("Electronics and Gadgets", "Including smartphones, laptops, tablets, cameras, and accessories like chargers and headphones.");
             productCategories.put("Apparel and Accessories", "Clothing items, shoes, bags, jewelry, and other fashion accessories.");

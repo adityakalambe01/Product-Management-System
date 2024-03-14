@@ -3,13 +3,16 @@ package com.products.service;
 import com.products.model.*;
 import com.products.repositories.CategoryRepository;
 import com.products.repositories.ProductRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -18,7 +21,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService CategoryService;
 
     /*
     *
@@ -80,7 +83,14 @@ public class ProductService {
         return false;
     }
 
-
-
+    /*
+    *
+    * Default Products
+    *
+    * */
+//    @PostConstruct
+//    public void addDefaultProducts(){
+//        System.out.println(true);
+//    }
 
 }
