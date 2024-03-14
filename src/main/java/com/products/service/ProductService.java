@@ -98,9 +98,7 @@ public class ProductService {
                         Math.round((Math.random() * (50000.00 - 30000.00) + 30000.00) * 100.0) / 100.0
                 );
                 productRepository.save(p);
-
             }
         }
-
     }
 }
