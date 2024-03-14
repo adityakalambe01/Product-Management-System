@@ -5,6 +5,8 @@ import com.products.repositories.CategoryRepository;
 import com.products.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,8 +59,9 @@ public class ProductService {
     * Get all Products
     *
     * */
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<Product> getAllProducts(Integer pageNumber, Integer pageSize) {
+
+        return productRepository.findAll(PageRequest.of(pageNumber,pageSize)).getContent();
     }
 
     /*

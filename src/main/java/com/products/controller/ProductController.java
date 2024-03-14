@@ -62,8 +62,11 @@ public class ProductController {
     *
     * */
     @GetMapping
-    public ResponseEntity<List<ProductDetailsResponse>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
+    public ResponseEntity<List<ProductDetailsResponse>> getAllProducts(
+            @RequestParam(value = "page", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "size", defaultValue = "5", required = false) Integer pageSize
+    ) {
+        List<Product> products = productService.getAllProducts(pageNumber, pageSize);
         List<ProductDetailsResponse> responseList = new ArrayList<>();
 
         for (Product product : products) {
