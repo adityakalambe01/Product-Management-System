@@ -99,7 +99,7 @@ public class ProductController {
         return productService.updateProduct(productId, updatedProduct) ? ResponseEntity.ok("Product updated successfully") : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/addDefault")
+    @RequestMapping("/addDefault")
     public void addDefaultProducts(){
         productService.addDefaultProducts();
     }
