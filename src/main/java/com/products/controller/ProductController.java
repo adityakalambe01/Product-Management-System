@@ -4,7 +4,6 @@ import com.products.model.Categories;
 import com.products.model.CategoryResponse;
 import com.products.model.Product;
 import com.products.model.ProductDetailsResponse;
-import com.products.service.CategoryService;
 import com.products.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,8 @@ public class ProductController {
     * */
     @PostMapping
     public ResponseEntity<String> addProduct(@RequestBody Product product) {
-        return productService.addProduct(product) ? ResponseEntity.ok("Product added successfully") : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add product");
+        return productService.addProduct(product) ?
+                ResponseEntity.ok("Product added successfully") : ResponseEntity.internalServerError().body("Failed to add product");
     }
 
     /*
@@ -44,7 +44,7 @@ public class ProductController {
 
         Categories category = product.getCategory();
         if (category == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Category Doesn't Exists of product id "+productId);
+            return ResponseEntity.internalServerError().body("Category Doesn't Exists of product id "+productId);
         }
 
         ProductDetailsResponse response = new ProductDetailsResponse(product.getId(), product.getName(), product.getCost(), new CategoryResponse(category.getCategoryId(), category.getCategoryName()));

@@ -76,6 +76,23 @@ public class CategoryController {
     public ResponseEntity<String> deleteCategoryById(@PathVariable("id") Long categoryId){
         Boolean result = categoryService.deleteCategoryById(categoryId);
 
+        if (result) {
+
+            return ResponseEntity.ok("Successfully deleted category having id "+categoryId);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid category id "+categoryId);
+        }
+    }
+
+    /*
+    *
+    * Force Delete Category
+    *
+    * */
+    @DeleteMapping("/force_delete/{id}")
+    public ResponseEntity<String> deleteCategoryByIdForcefully(@PathVariable("id") Long categoryId){
+        Boolean result = categoryService.deleteCategoryByIdForcefully(categoryId);
+
         if (result==null){
             return ResponseEntity.internalServerError().body("Products exists so category is unable to delete");
         } else if (result) {
@@ -85,6 +102,5 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid category id "+categoryId);
         }
     }
-
 
 }
