@@ -38,7 +38,7 @@ public class ProductController {
     * Get product By Id
     *
     * */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProductDetailsResponse> getProductById(@PathVariable("id") Long productId){
         Product product = productService.getProductById(productId);
         if (product == null) {
