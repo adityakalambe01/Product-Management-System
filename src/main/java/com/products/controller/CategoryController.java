@@ -73,34 +73,27 @@ public class CategoryController {
     *
     * */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategoryById(@PathVariable("id") Long categoryId){
-        Boolean result = categoryService.deleteCategoryById(categoryId);
-
-        if (result) {
-
-            return ResponseEntity.ok("Successfully deleted category having id "+categoryId);
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid category id "+categoryId);
+    public ResponseEntity<String> deleteCategoryById(
+            @PathVariable("id") Long categoryId,
+            @RequestParam(value = "force", defaultValue = "false", required = false) boolean forceDelete
+    ) {
+        Boolean result = false;
+        if (forceDelete) {
+            result = categoryService.deleteCategoryById(categoryId, true);
+            if (result) {
+                return ResponseEntity.ok("Category and associated products deleted successfully!");
+            } else {
+                return ResponseEntity.internalServerError().body("Category not found or unable to delete.");
+            }
+        } else {
+            result = categoryService.deleteCategoryById(categoryId, false);
+            if (result == null) {
+                return ResponseEntity.internalServerError().body("Products exist, so category cannot be deleted. Use force delete to delete categories as well as products.");
+            } else if (result) {
+                return ResponseEntity.ok("Category deleted successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid category ID " + categoryId);
+            }
         }
     }
-
-    /*
-    *
-    * Force Delete Category
-    *
-    * */
-    @DeleteMapping("/force_delete/{id}")
-    public ResponseEntity<String> deleteCategoryByIdForcefully(@PathVariable("id") Long categoryId){
-        Boolean result = categoryService.deleteCategoryByIdForcefully(categoryId);
-
-        if (result==null){
-            return ResponseEntity.internalServerError().body("Products exists so category is unable to delete");
-        } else if (result) {
-
-            return ResponseEntity.ok("Successfully deleted category having id "+categoryId);
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid category id "+categoryId);
-        }
-    }
-
 }
