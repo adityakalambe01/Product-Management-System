@@ -21,7 +21,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private CategoryService CategoryService;
+    private CategoryRepository categoryService;
 
     /*
     *
@@ -82,15 +82,4 @@ public class ProductService {
         }
         return false;
     }
-
-    /*
-    *
-    * Default Products
-    *
-    * */
-//    @PostConstruct
-//    public void addDefaultProducts(){
-//        System.out.println(true);
-//    }
-
 }
