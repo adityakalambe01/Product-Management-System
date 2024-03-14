@@ -20,9 +20,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private CategoryService categoryService;
-
     /*
     *
     * Add Product
@@ -39,15 +36,15 @@ public class ProductController {
     *
     * */
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDetailsResponse> getProductById(@PathVariable("id") Long productId){
+    public ResponseEntity<Object> getProductById(@PathVariable("id") Long productId){
         Product product = productService.getProductById(productId);
         if (product == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid product id "+productId);
         }
 
         Categories category = product.getCategory();
         if (category == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Category Doesn't Exists of product id "+productId);
         }
 
         ProductDetailsResponse response = new ProductDetailsResponse(product.getId(), product.getName(), product.getCost(), new CategoryResponse(category.getCategoryId(), category.getCategoryName()));
@@ -89,7 +86,7 @@ public class ProductController {
     * */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProductById(@PathVariable("id") Long productId) {
-        return productService.deleteProductById(productId) ? ResponseEntity.ok("Product deleted successfully") : ResponseEntity.notFound().build();
+        return productService.deleteProductById(productId) ? ResponseEntity.ok("Product deleted successfully") : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid product id "+productId);
     }
 
     /*
@@ -100,5 +97,10 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateProduct(@PathVariable("id") Long productId, @RequestBody Product updatedProduct) {
         return productService.updateProduct(productId, updatedProduct) ? ResponseEntity.ok("Product updated successfully") : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/addDefault")
+    public void addDefaultProducts(){
+        productService.addDefaultProducts();
     }
 }

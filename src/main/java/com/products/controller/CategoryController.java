@@ -3,6 +3,7 @@ package com.products.controller;
 import com.products.model.Categories;
 import com.products.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,7 +64,7 @@ public class CategoryController {
     public ResponseEntity<Object> getCategoryByID(@PathVariable("id") Long categoryId){
         Categories dbCategory = categoryService.getCategoryById(categoryId);
 
-        return (dbCategory == null) ? ResponseEntity.ok("Invalid category id "+categoryId) : ResponseEntity.ok(dbCategory);
+        return (dbCategory == null) ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid category id "+categoryId) : ResponseEntity.ok(dbCategory);
     }
 
     /*
@@ -73,8 +74,16 @@ public class CategoryController {
     * */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategoryById(@PathVariable("id") Long categoryId){
-        return categoryService.deleteCategoryById(categoryId) ?
-                ResponseEntity.ok("Successfully deleted category having id "+categoryId) : ResponseEntity.ok("Invalid category id "+categoryId);
+        Boolean result = categoryService.deleteCategoryById(categoryId);
+
+        if (result==null){
+            return ResponseEntity.internalServerError().body("Products exists so category is unable to delete");
+        } else if (result) {
+
+            return ResponseEntity.ok("Successfully deleted category having id "+categoryId);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid category id "+categoryId);
+        }
     }
 
 
