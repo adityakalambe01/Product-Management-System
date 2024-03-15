@@ -20,19 +20,27 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+
+
     /*
     *
     * Add Product
     *
     * */
     public boolean addProduct(Product product) {
-        Product p = new Product();
-        p.setName(
-                product.getName().trim().replaceAll("\\s+"," ")
-        );
-        p.setCost(product.getCost());
-        p.setCategory(product.getCategory());
-        productRepository.save(p);
+        try{
+            Product newProduct = new Product();
+            newProduct.setName(
+                    product.getName().trim().replaceAll("\\s+"," ")
+            );
+            newProduct.setCost(product.getCost());
+            newProduct.setCategory(
+                    categoryRepository.findById(product.getCategory().getCategoryId()).get()
+            );
+            productRepository.save(newProduct);
+        }catch (Exception e){
+            return false; // if any error occur
+        }
         return true;
     }
 
