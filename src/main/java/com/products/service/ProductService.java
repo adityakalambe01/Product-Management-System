@@ -101,7 +101,7 @@ public class ProductService {
     * Add Default Products
     *
     * */
-    public void addDefaultProducts(){
+    public String addDefaultProducts(){
         List<Categories> allCategories = new LinkedList<>(categoryRepository.findAll());
         System.out.println("\n\n\n\n");
         long index = productRepository.count()+1;
@@ -116,5 +116,6 @@ public class ProductService {
                 productRepository.save(p);
             }
         }
+        return "Default products added successfully!";
     }
 }
