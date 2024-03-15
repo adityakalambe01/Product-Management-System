@@ -1,12 +1,14 @@
 package com.products.controller;
 
 import com.products.model.Categories;
+import com.products.model.CategoryResponse;
 import com.products.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,11 +50,18 @@ public class CategoryController {
     *
     * */
     @GetMapping
-    public ResponseEntity<List<Categories>> getAllCategories(
+    public ResponseEntity<List<CategoryResponse>> getAllCategories(
             @RequestParam(value = "page",defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value = "size", defaultValue = "5", required = false) Integer pageSize
     ){
-        return ResponseEntity.ok(categoryService.getAllCategories(pageNumber, pageSize));
+        List<Categories> categories = categoryService.getAllCategories(pageNumber, pageSize);
+        List<CategoryResponse> responseList = new ArrayList<>();
+        for (Categories category : categories){
+            responseList.add(
+                    new CategoryResponse(category.getCategoryId(),category.getCategoryName(), category.getCategoryDescription())
+            );
+        }
+        return ResponseEntity.ok(responseList);
     }
 
     /*
@@ -64,7 +73,8 @@ public class CategoryController {
     public ResponseEntity<Object> getCategoryByID(@PathVariable("id") Long categoryId){
         Categories dbCategory = categoryService.getCategoryById(categoryId);
 
-        return (dbCategory == null) ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid category id "+categoryId) : ResponseEntity.ok(dbCategory);
+        return (dbCategory == null) ?
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid category id "+categoryId) : ResponseEntity.ok(new CategoryResponse(dbCategory.getCategoryId(), dbCategory.getCategoryName(), dbCategory.getCategoryDescription()));
     }
 
     /*

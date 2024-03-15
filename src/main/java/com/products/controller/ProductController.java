@@ -47,7 +47,7 @@ public class ProductController {
             return ResponseEntity.internalServerError().body("Category Doesn't Exists of product id "+productId);
         }
 
-        ProductDetailsResponse response = new ProductDetailsResponse(product.getId(), product.getName(), product.getCost(), new CategoryResponse(category.getCategoryId(), category.getCategoryName()));
+        ProductDetailsResponse response = new ProductDetailsResponse(product.getId(), product.getName(), product.getCost(), new CategoryResponse(category.getCategoryId(), category.getCategoryName(), category.getCategoryDescription()));
 
         return ResponseEntity.ok(response);
     }
@@ -69,7 +69,7 @@ public class ProductController {
         for (Product product : products) {
             Categories category = product.getCategory();
             if (category != null) {
-                CategoryResponse categoryResponse = new CategoryResponse(category.getCategoryId(), category.getCategoryName());
+                CategoryResponse categoryResponse = new CategoryResponse(category.getCategoryId(), category.getCategoryName(), category.getCategoryDescription());
                 ProductDetailsResponse productDetailsResponse = new ProductDetailsResponse(product.getId(), product.getName(), product.getCost(), categoryResponse);
                 responseList.add(productDetailsResponse);
             }
