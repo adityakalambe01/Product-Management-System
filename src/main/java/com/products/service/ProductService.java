@@ -26,8 +26,13 @@ public class ProductService {
     *
     * */
     public boolean addProduct(Product product) {
-
-        productRepository.save(product);
+        Product p = new Product();
+        p.setName(
+                product.getName().trim().replaceAll("\\s+"," ")
+        );
+        p.setCost(product.getCost());
+        p.setCategory(product.getCategory());
+        productRepository.save(p);
         return true;
     }
 
@@ -73,6 +78,9 @@ public class ProductService {
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
+            updatedProduct.setName(
+                    updatedProduct.getName().trim().replaceAll("\\s+"," ")
+            );
             BeanUtils.copyProperties(updatedProduct, product, "id");
             productRepository.save(product);
             return true;
