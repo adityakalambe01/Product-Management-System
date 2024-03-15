@@ -96,7 +96,7 @@ public class ProductController {
     * */
     @PutMapping("/{id}")
     public ResponseEntity<String> updateProduct(@PathVariable("id") Long productId, @RequestBody Product updatedProduct) {
-        return productService.updateProduct(productId, updatedProduct) ? ResponseEntity.ok("Product updated successfully") : ResponseEntity.notFound().build();
+        return productService.updateProduct(productId, updatedProduct) ? ResponseEntity.ok("Product updated successfully") : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid product id "+productId+" or something went wrong");
     }
 
     @RequestMapping("/addDefault")
