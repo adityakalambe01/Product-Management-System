@@ -54,11 +54,23 @@ public class CategoryService {
     *
     * */
     public Boolean addCategory(Categories category){
+
         try {
-            Categories dbCategory = categoryRepository.findByCategoryName(category.getCategoryName().trim());
+            Categories newCategory = new Categories();
+            newCategory.setCategoryName(
+                    category.getCategoryName().trim().replaceAll("\\s+"," ")
+            );//remove white spaces and set category name
+            newCategory.setCategoryDescription(
+                    category.getCategoryDescription().trim().replaceAll("\\s+"," ")
+            );//remove white spaces and set category description
+            newCategory.setProducts(category.getProducts());
+
+            Categories dbCategory = categoryRepository.findByCategoryName(newCategory.getCategoryName());//check category is existing or not
+
             if (dbCategory != null)
                 throw new IllegalArgumentException("Category already exists!");
-            categoryRepository.save(category);
+
+            categoryRepository.save(newCategory);
         }catch (Exception e){
             return false; // Category with the given category name already exists
         }
@@ -75,8 +87,13 @@ public class CategoryService {
             Categories dbCategory = categoryRepository.findById(categoryIdFromBrowser).orElse(null);
             if (dbCategory == null)
                 throw new IllegalArgumentException("Category not found!");
-            dbCategory.setCategoryName(updateCategory.getCategoryName());
-            dbCategory.setCategoryDescription(updateCategory.getCategoryDescription());
+
+            dbCategory.setCategoryName(
+                    updateCategory.getCategoryName().trim().replaceAll("\\s+"," ")
+            );
+            dbCategory.setCategoryDescription(
+                    updateCategory.getCategoryDescription().trim().replaceAll("\\s+"," ")
+            );
             categoryRepository.save(dbCategory);
         }catch (Exception e){
             return false; // Category with the given ID not found
